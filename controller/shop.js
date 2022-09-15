@@ -12,3 +12,10 @@ exports.getProducts = (req, res, next) => {
             console.log(err)
         })
 }
+
+exports.getMobileView = (req, res, next) => {
+    res.render('../views/includes/mobile-view.ejs', {
+        pageTitle: 'Menu'
+
+    })
+}
