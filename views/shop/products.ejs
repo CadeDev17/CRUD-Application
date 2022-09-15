@@ -1,0 +1,23 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+    <%- include('../includes/navigation.ejs') %>
+    <main class="container">
+        <% for (let product of prod) { %>
+            <div class="product-container">
+                <div class="product-image-container">
+                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                </div>
+                <div class="product-title">
+                    <h2><%= product.title %> || $<%= product.price %></h2>
+                </div>
+                <div class="description">
+                    <p><%= product.description %></p>
+                </div>
+                <button class="btn">Add To Cart</button>
+                <a href="/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
+                <a href="/delete-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Delete</button></a>
+            </div>
+        <% } %>
+    </main>
+    
+<%- include('../includes/end.ejs') %>
