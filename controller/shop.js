@@ -13,6 +13,45 @@ exports.getProducts = (req, res, next) => {
         })
 }
 
+
+exports.getCart = (req, res, next) => {
+    req.user 
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then(user => {
+            const products = user.cart.items
+            res.render('./shop/cart.ejs', {
+                pageTitle: 'Your Cart',
+                products: products
+            })
+        })
+        .catch(err => console.log(err))
+}
+
+exports.postCart = (req, res, next) => {
+    const prodId = req.body.productId
+    Product.findById(prodId)
+        .then(product => {
+            return req.user.addToCart(product)
+        })
+        .then(result => {
+            console.log(result)
+            res.redirect('/cart')
+        })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.getMobileView = (req, res, next) => {
     res.render('../views/includes/mobile-view.ejs', {
         pageTitle: 'Menu'

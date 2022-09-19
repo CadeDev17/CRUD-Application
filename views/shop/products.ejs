@@ -13,8 +13,8 @@
                 <div class="description">
                     <p><%= product.description %></p>
                 </div>
-                <button class="btn">Add To Cart</button>
-                <a href="/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
+                <button action="'/cart" method="POST" class="btn">Add To Cart</button>
+                <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
                 <a href="/delete-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Delete</button></a>
             </div>
         <% } %>
