@@ -1,7 +1,9 @@
+// Recently Completed:
+// - Completed cart functionality (ability to get cart, add to cart, and delete from your cart)
 // ToDo:
-// User model is created and you can now use req.user to access the current user and their cart
-// Use that information to set up the functionality of the cart for all GET/POST routes 
-// GET cart, POST place items in cart, DELETE items from cart, etc.
+// - Figure out how to make it so if you have multiple of the same product and want to delete
+// one of them, it only deletes one and not all of that item
+// - Work on the user authentication and attaching users to their cart, session, and profile 
 
 const express = require('express') 
 const path = require('path')

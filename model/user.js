@@ -13,22 +13,24 @@ const userSchema = new Schema({
         required: true 
     },
     cart: {
-        items: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product',
-            required: true
-        },
-        quantity: {
-            type: Number,
-            required: true
-        }
+        items: [
+            {
+                productId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Product',
+                    required: true
+                },
+
+                quantity: {
+                    type: Number,
+                    required: true
+                }
+            }
+        ]
     }
 })
 
 userSchema.methods.addToCart = function(product) {
-    // This will allow us to figure out if we have cart items already 
-    // and just increment the amount of that product or add it's first instance 
-    // of it in the cart
     const cartProdIndex = this.cart.items.findIndex(cartProd => {
         return cartProd.productId.toString() === product._id.toString()
     })
@@ -37,7 +39,7 @@ userSchema.methods.addToCart = function(product) {
     const updatedCartItems = [...this.cart.items]
 
     if (cartProdIndex >= 0) {
-        newQualtity = this.cart.items[cartProdIndex].quantity + 1
+        newQuantity = this.cart.items[cartProdIndex].quantity + 1
         updatedCartItems[cartProdIndex].quantity = newQuantity
     }else {
         updatedCartItems.push({
@@ -49,6 +51,15 @@ userSchema.methods.addToCart = function(product) {
         items: updatedCartItems
     }
     this.cart = updatedCart
+    return this.save()
+}
+
+userSchema.methods.removeFromCart = function(productId) {
+    const updatedCartItems = this.cart.items.filter(item => {
+        return item.productId.toString() !== productId.toString()
+    })
+
+    this.cart.items = updatedCartItems
     return this.save()
 }
 

@@ -1,16 +1,18 @@
 const express = require('express') 
 const { SchemaTypeOptions } = require('mongoose')
 
-const productsController = require('../controller/shop')
+const shopController = require('../controller/shop')
 
 const router = express.Router()
 
-router.get('/products', productsController.getProducts)
+router.get('/products', shopController.getProducts)
 
-router.get('/cart', productsController.getCart)
+router.get('/cart', shopController.getCart)
 
-router.post('/cart', productsController.postCart)
+router.post('/cart', shopController.postCart)
 
-router.get('/mobile-view', productsController.getMobileView)
+router.post('/delete-cart-item', shopController.postCartDeleteProduct)
+
+router.get('/mobile-view', shopController.getMobileView)
 
 module.exports = router
