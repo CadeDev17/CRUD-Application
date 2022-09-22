@@ -1,5 +1,4 @@
 const express = require('express') 
-const { SchemaTypeOptions } = require('mongoose')
 
 const shopController = require('../controller/shop')
 
@@ -14,5 +13,9 @@ router.post('/cart', shopController.postCart)
 router.post('/delete-cart-item', shopController.postCartDeleteProduct)
 
 router.get('/mobile-view', shopController.getMobileView)
+
+router.post('/set-order', shopController.setOrder)
+
+router.get('/orders', shopController.getOrder)
 
 module.exports = router

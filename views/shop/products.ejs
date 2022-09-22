@@ -13,12 +13,16 @@
                 <div class="description">
                     <p><%= product.description %></p>
                 </div>
-                <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
-                <a href="/delete-product/<%= product._id %>" class="btn"><button class="btn">Delete</button></a>
-                <form action="/cart" method="POST" class="btn">
-                    <button class="btn" type="submit">Add To Cart</button>
-                    <input type="hidden" name="productId" value="<%= product._id %>">
-                </form>
+                <% if (isAuthenticated) { %>
+                    <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
+                    <form action="/admin/delete-product/<%= product._id %>" method="POST" class="btn">
+                        <button class="btn" type="submit">Delete</button>
+                    </form>
+                    <form action="/cart" method="POST" class="btn">
+                        <button class="btn" type="submit">Add To Cart</button>
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                    </form>
+                <% } %>
             </div>
         <% } %>
     </main>

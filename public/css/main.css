@@ -16,6 +16,14 @@
     cursor: pointer;
 }
 
+.logout {
+    border: none;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #E1CA96;
+    cursor: pointer;
+}
+
 .list-container {
     display: flex;
     justify-content: space-between;
@@ -137,6 +145,31 @@ span {
     align-items: center;
     margin-top: 150px;
 }
+
+/* ORDERS SECTION */
+
+.order-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 25px auto;
+}
+
+.indiv-order {
+    margin: 15px 0;
+    border: 5px solid #E1CA96;
+    border-radius: 10px;
+}
+
+.indiv-order h1,
+.indiv-order h3,
+.indiv-order p,
+.indiv-order button {
+    margin: 10px;
+}
+
 
 /* MOBILE NAV SECTION */
 

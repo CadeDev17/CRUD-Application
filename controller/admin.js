@@ -3,7 +3,8 @@ const Product = require('../model/product')
 exports.getProducts = (req, res, next) => {
     res.render('./admin/add-products.ejs', {
         pageTitle: 'Add Products',
-        editing: false
+        editing: false,
+        isAuthenticated: req.session.isLoggedIn
     })
 }
 
@@ -17,7 +18,8 @@ exports.postAddProduct = (req, res, next) => {
         title: title,
         imageUrl: imageUrl,
         price: price,
-        description: description
+        description: description,
+        userId: req.user
     })
     product.save()
         .then(result => {
@@ -43,7 +45,8 @@ exports.getEditProduct = (req, res, next) => {
             res.render('./admin/add-products.ejs', {
                 pageTitle: "Edit Product",
                 editing: editMode,
-                product: product
+                product: product,
+                isAuthenticated: req.session.isLoggedIn
             })
         })
         .catch(err => {
@@ -53,7 +56,6 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
     const prodId = req.params.productId
-    console.log(prodId)
     const updatedTitle = req.body.title
     const updatedPrice = req.body.price
     const updatedDescription = req.body.description
@@ -80,7 +82,6 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.params.productId
-    console.log(prodId)
     Product.findByIdAndRemove(prodId)
         .then(() => {
             console.log('Product Removed')

@@ -1,0 +1,23 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+    <%- include('../includes/navigation.ejs') %>
+    <% if (orders.length <= 0) { %>
+        <h1>No Orders Found</h1>
+    <% } else { %>
+        <main>
+            <div class="order-container">
+                <% orders.forEach(order => { %>
+                    <div class="indiv-order">
+                        <h1>OrderId: <%= order._id %></h1>
+                        <% order.products.forEach(prod => { %>
+                            <h3>Product Name: <%= prod.product.title %></h3>
+                            <p>Quantity: <%= prod.quantity %></p>
+                        <% }) %>
+                        <button class="btn">Delete Order</button>
+                    </div>
+                <% }) %>
+            </div>
+        </main>
+    <% } %>
+
+<%- include('../includes/end.ejs') %>

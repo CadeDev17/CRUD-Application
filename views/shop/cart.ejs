@@ -5,18 +5,22 @@
         <% if (products.length > 0) { %>
             <% products.forEach(product => { %>
                 <div class="product-container">
-                        <div class="product-image-container">
-                            <img src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>">
-                        </div>
-                        <div class="product-title">
-                            <h2><%= product.productId.title %> || Quantity:<%= product.quantity %></h2>
-                        </div>
-                        <form action="/delete-cart-item" method="POST" class="btn">
-                            <a><button type="submit" class="btn">Delete</button></a>
-                            <input type="hidden" name="productId" value="<%= product.productId._id %>">
-                        </form>
+                    <div class="product-image-container">
+                        <img src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>">
                     </div>
-                <% }) %>
+                    <div class="product-title">
+                        <h2><%= product.productId.title %> || Quantity:<%= product.quantity %></h2>
+                    </div>
+                    <form action="/delete-cart-item" method="POST" class="btn">
+                        <a><button type="submit" class="btn">Delete</button></a>
+                        <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                    </form>
+                </div>
+            <% }) %>
+            <br>
+            <form action="/set-order" method="POST" class="btn">
+                <a><button type="submit" class="btn">Order</button></a>
+            </form>
         <% } else { %>
             <div class="blank-cart-text">
                 <h1>NO PRODUCTS FOUND!</h1>
