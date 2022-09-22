@@ -22,7 +22,9 @@ const adminRoute = require('./routes/admin')
 const authRoute = require('./routes/auth')
 
 const MONGODB_URI =
-    'mongodb+srv://Decryptr:Yko35961!@cluster0.rg76ghz.mongodb.net/shop';
+    'mongodb://127.0.0.1:27017/shop';
+
+    // mongodb+srv://Decryptr:Yko35961!@cluster0.rg76ghz.mongodb.net/shop
 
 const app = express() 
 const store = new MongoDBStore({
@@ -37,7 +39,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session(
   {
-    secret: 'my secret',
+    secret: 'superduperlongsecret',
     resave: false,
     saveUninitialized: false,
     store: store
