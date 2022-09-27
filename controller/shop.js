@@ -21,7 +21,6 @@ exports.getCart = (req, res, next) => {
         .populate('cart.items.productId')
         .then(user => {
             const products = user.cart.items
-            console.log(products)
             res.render('./shop/cart.ejs', {
                 pageTitle: 'Your Cart',
                 products: products,
@@ -33,6 +32,7 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId
+    console.log(req.user)
     Product.findById(prodId)
         .then(product => {
             return req.user.addToCart(product)

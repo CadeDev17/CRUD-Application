@@ -170,6 +170,9 @@ span {
     margin: 10px;
 }
 
+.deleteOrder {
+    border: none;
+}
 
 /* MOBILE NAV SECTION */
 

@@ -10,13 +10,15 @@
                 <h3><a href="/admin/add-product">Admin</a></h3>
             <% } %>
             <div>
-                <% if (isAuthenticated) { %>
-                    <a href="/cart"><box-icon class="cart" name='cart' color='#e1ca96' ></box-icon></a>
-                    <form action="/logout" method="POST">
-                        <button class="logout" type="submit">Logout</button>
-                    </form>
-                <% } else { %>
-                <h3><a href="/login">Login</a></h3>
+                <% if (!isAuthenticated) { %>
+                    <h3><a href="/login">Login</a></h3>
+                    <h3><a href="/signup">Sign-up</a></h3>
+                    <% } else { %>
+                        <a href="/cart"><box-icon class="cart" name='cart' color='#e1ca96' ></box-icon></a>
+                        <form action="/logout" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+                            <button class="logout" type="submit">Logout</button>
+                        </form>
                 <% } %>
             </div>
         </div>

@@ -16,10 +16,12 @@
                 <% if (isAuthenticated) { %>
                     <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn"><button class="btn">Edit</button></a>
                     <form action="/admin/delete-product/<%= product._id %>" method="POST" class="btn">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
                         <button class="btn" type="submit">Delete</button>
                     </form>
                     <form action="/cart" method="POST" class="btn">
                         <button class="btn" type="submit">Add To Cart</button>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
                         <input type="hidden" name="productId" value="<%= product._id %>">
                     </form>
                 <% } %>
