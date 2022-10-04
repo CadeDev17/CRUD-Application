@@ -35,3 +35,8 @@
     text-align: center;
     border: 5px solid red;
 }
+
+#reset{
+    text-align: center;
+    margin-right: 15px;
+}

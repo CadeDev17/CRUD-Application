@@ -1,12 +1,16 @@
-// ToDo:
-// - Add signup functionality √√
-// - Check DB for existing emails √√
-// - use bcrypt for excrypting passwords in the DB √√
-// - add route protection from users that are not signed using middleware function √√
-// - Once signin functionality is complete, edit the dummy data for logging in to make it query the DB for users √√
-// - Add csrf protection √√
-// - Add error messages and figure out req.flash() bug √√
-// - Go back and re-write the above steps from scratch √√
+// ToDo pt.1:
+// - Add ability to send email to new users using sendgrid √
+// - Send emails with nodemailer √
+// - Create reset password option √
+// - Update password in DB after user resets √
+// - Add authorization for product editing/adding so that one user cannot see/edit another users created products √
+// - Re-write above steps from scratch
+
+// ToDo pt.2:
+// - Install and use express-validator
+// - Add input validation to signup page 
+// - Add input validation to login page
+// - Add input validation to the add/edit products pages
 
 const express = require('express') 
 const path = require('path')
