@@ -1,10 +1,13 @@
+const { validationResult } = require('express-validator');
+
 const Product = require('../model/product')
 
 exports.getProducts = (req, res, next) => {
     res.render('./admin/add-products.ejs', {
         pageTitle: 'Add Products',
         editing: false,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        validationErrors: []
     })
 }
 
@@ -13,7 +16,24 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl
     const price = req.body.price
     const description = req.body.description
+    const errors = validationResult(req)
 
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422).render('./admin/edit-product.ejs', {
+          pageTitle: 'Add Product',
+          editing: false,
+          hasError: true,
+          product: {
+            title: title,
+            imageUrl: imageUrl,
+            price: price,
+            description: description
+          },
+          errorMessage: errors.array()[0].msg,
+          validationErrors: errors.array()
+        });
+    }
     const product = new Product({
         title: title,
         imageUrl: imageUrl,
@@ -46,7 +66,9 @@ exports.getEditProduct = (req, res, next) => {
                 pageTitle: "Edit Product",
                 editing: editMode,
                 product: product,
-                isAuthenticated: req.session.isLoggedIn
+                isAuthenticated: req.session.isLoggedIn,
+                errorMessage: null,
+                validationErrors: []
             })
         })
         .catch(err => {
@@ -60,10 +82,28 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price
     const updatedDescription = req.body.description
     const updatedImageUrl = req.body.imageUrl
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()){
+        return res.status(422).render('./admin/edit-product.ejs', {
+            pageTitle: 'Edit Product',
+            editing: true,
+            hasError: true,
+            product: {
+              title: updatedTitle,
+              imageUrl: updatedImageUrl,
+              price: updatedPrice,
+              description: updatedDesc,
+              _id: prodId
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors: errors.array()
+        });
+    }
 
     Product.findById(prodId)
         .then(product => {
-            console.log(product)
+            // console.log(product)
             product.title = updatedTitle
             product.price = updatedPrice
             product.description = updatedDescription

@@ -3,10 +3,9 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
-const { validationResult } = require('express-validator/check')
+const { validationResult } = require('express-validator')
 
 const User = require('../model/user');
-const user = require('../model/user');
 
 const transporter = nodemailer.createTransport(
   sendgridTransport({
@@ -26,18 +25,44 @@ exports.getLogin = (req, res, next) => {
   res.render('./auth/login.ejs', {
     pageTitle: 'Login',
     isAuthenticated: req.session.isLoggedIn,
-    errorMessage: errMessage
+    errorMessage: errMessage,
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: ''
+    },
+    validationErrors: []
   })
 }
 
 exports.postLogin = (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
+  const errors = validationResult(req)
+  if (!errors.isEmpty()){
+    return res.status(422).render('./auth/login.ejs', {
+      pageTitle: 'Login',
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password
+      },
+      validationErrors: errors.array()
+    })
+  }
+
   User.findOne({ email: email })
     .then(user => {
       if (!user){
-        req.flash('error', 'This email/password does not exist in our database')
-        res.redirect('/login')
+        return res.status(422).render('./auth/login.ejs', {
+          pageTitle: 'Login',
+          errorMessage: 'Invalid email or password.',
+          oldInput: {
+            email: email,
+            password: password
+          },
+          validationErrors: []
+        })
       }
       bcrypt
         .compare(password, user.password)
@@ -51,9 +76,21 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/')
             })
           }
-          req.flash('error', 'This email/password does not exist in our database')
-          res.redirect('/login')
+          return res.status(422).render('./auth/login.ejs', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: 'Invalid email or password.',
+            oldInput: {
+              email: email,
+              password: password
+            },
+            validationErrors: []
+          });
         })
+        .catch(err => {
+          console.log(err);
+          res.redirect('/login');
+        });
     })
     .catch(err => {
       console.log(err)
@@ -70,44 +107,59 @@ exports.getSignup = (req, res, next) => {
   res.render('./auth/signup.ejs', {
     pageTitle: 'Sign-up',
     isAuthenticated: req.session.isLoggedIn,
-    errorMessage: errMessage
+    errorMessage: errMessage,
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: ''
+    },
+    validationErrors: []
   })
 }
 
 exports.postSignup = (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
-  const confirmPassword = req.body.confirmPassword
-  User.findOne({ email: email })
-    .then(existingUser => {
-      if (existingUser) {
-        req.flash('error', 'This email already exists, try another one')
-        res.redirect('/signup')
-      }
-      return bcrypt
-        .hash(password, 12)
-        .then(hashedPass => {
-          const user = new User({ 
-            email: email,
-            password: hashedPass,
-            cart: { items: [] }
-          })
-          return user.save()
-        })
-        .then(result => {
-          res.redirect('/login')
-          console.log(email)
-          return transporter.sendMail({
-            to: email,
-            from: 'decryptr22@gmail.com',
-            subject: 'Thank you for joining the devSwag() community!',
-            html:'<h1>Welcome to devSwag()!</h1>'
-          })
-        })
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('./auth/signup.ejs', {
+      pageTitle: 'Signup',
+      errorMessage: errors.array()[0].msg,
+      isAuthenticated: req.session.isLoggedIn,
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword
+      },
+      validationErrors: errors.array()
+    });
+  }
+
+  bcrypt
+    .hash(password, 12)
+    .then(hashedPass => {
+      const user = new User({ 
+        email: email,
+        password: hashedPass,
+        cart: { items: [] }
+      })
+      return user.save()
     })
-    .catch(err => {
-      console.log(err)
+    .then(result => {
+      res.redirect('/login')
+      console.log(email)
+      return transporter.sendMail({
+        to: email,
+        from: 'decryptr22@gmail.com',
+        subject: 'Thank you for joining the devSwag() community!',
+        html:'<h1>Welcome to devSwag()!</h1>'
+      })
     })
+  .catch(err => {
+    console.log(err)
+  })
 }
 
 exports.postLogout = (req, res, next) => {

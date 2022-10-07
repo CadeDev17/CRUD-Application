@@ -7,9 +7,9 @@
 // - Re-write above steps from scratch
 
 // ToDo pt.2:
-// - Install and use express-validator
-// - Add input validation to signup page 
-// - Add input validation to login page
+// - Install and use express-validator √
+// - Add input validation to signup page (email, password, confirmPassword)
+// - Add input validation to login page (email, password)
 // - Add input validation to the add/edit products pages
 
 const express = require('express') 

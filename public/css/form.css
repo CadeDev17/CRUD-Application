@@ -40,3 +40,7 @@
     text-align: center;
     margin-right: 15px;
 }
+
+.invalid {
+    border-color: red;
+}
