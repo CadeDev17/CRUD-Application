@@ -8,7 +8,7 @@
             <div class="order-container">
                 <% orders.forEach(order => { %>
                     <div class="indiv-order">
-                        <h1>OrderId: <%= order._id %></h1>
+                        <h1>OrderId: <%= order._id %> - <a href="/orders/<%= order._id %>">Invoice</a></h1>
                         <% order.products.forEach(prod => { %>
                             <h3>Product Name: <%= prod.product.title %></h3>
                             <p>Quantity: <%= prod.quantity %></p>

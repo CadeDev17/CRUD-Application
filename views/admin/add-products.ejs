@@ -4,18 +4,25 @@
 
 <body>
     <%- include('../includes/navigation.ejs') %>
+    <% if (errorMessage) { %>
+        <h2 class="errorMessage"><%= errorMessage %></h2>
+    <% } %>
     <main>
         <div class="add-products-title">
             <h1><% if (editing) { %>Edit product<% } else { %>Create Product<% } %></h1>
         </div>
-        <form action="/admin/<% if (editing) { %>edit-product/<%= product._id %>?edit=true<% } else { %>add-product<% } %>" method="POST" class="input-container">
+        <form action="/admin/<% if (editing) { %>edit-product/<%= product._id %>?edit=true<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data" class="input-container">
             <div>
                 <label for="title">Title</label>
                 <input name="title" id="title" type="text" value="<% if (editing) { %><%= product.title %><% } %>" class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"/>
             </div>
-            <div>
+            <!-- <div>
                 <label for="imageUrl">Image URL</label>
                 <input name="imageUrl" id="imageUrl" type="text" value="<% if (editing) { %><%= product.imageUrl %><% } %>" class="<%= validationErrors.find(e => e.param === 'imageUrl') ? 'invalid' : '' %>"/>
+            </div> -->
+            <div>
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" >
             </div>
             <div>
                 <label for="price">Price</label>

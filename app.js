@@ -1,16 +1,11 @@
 // ToDo pt.1:
-// - Add ability to send email to new users using sendgrid √
-// - Send emails with nodemailer √
-// - Create reset password option √
-// - Update password in DB after user resets √
-// - Add authorization for product editing/adding so that one user cannot see/edit another users created products √
-// - Re-write above steps from scratch
-
-// ToDo pt.2:
-// - Install and use express-validator √
-// - Add input validation to signup page (email, password, confirmPassword)
-// - Add input validation to login page (email, password)
-// - Add input validation to the add/edit products pages
+// - Add file picker for the add-product part of admin products √
+// - Install Multer and configure it to decifer file names and paths √
+// - Store files in DB √
+// - Make sure that imageUrl is removed from every appropriate area √
+// - Create the invoice links on orders √
+// - build out pdf dynamically with pdfkit √
+// - Make pdf specific to the order using authentication √
 
 const express = require('express') 
 const path = require('path')
@@ -20,6 +15,7 @@ const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
 const flash = require('connect-flash')
+const multer = require('multer')
 
 const User = require('./model/user')
 
@@ -27,6 +23,7 @@ const homeRoute = require('./routes/home')
 const productRoute = require('./routes/shop')
 const adminRoute = require('./routes/admin')
 const authRoute = require('./routes/auth')
+const { file } = require('pdfkit')
 
 const MONGODB_URI =
   'mongodb+srv://Decryptr:Yko35961!@cluster0.rg76ghz.mongodb.net/shop'
@@ -42,11 +39,30 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf()
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname)
+  }
+})
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+    cb(null, true)
+  } else {
+    cb(null, false)
+  }
+}
+
 app.set('view engine', 'ejs')
 app.set('views', 'views') 
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'))
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(session(
   {
     secret: 'superduperlongsecret',
